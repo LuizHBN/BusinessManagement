@@ -66,6 +66,7 @@ public class ProdutoController {
         produtoRepository.save(produto);
 
         return "redirect:/produto";
+
     }
 
 }
