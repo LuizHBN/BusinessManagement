@@ -3,6 +3,7 @@ package com.henrique.bussinessmanagement.controller;
 
 import com.henrique.bussinessmanagement.dto.RequisicaoProduto;
 import com.henrique.bussinessmanagement.model.Produto;
+import com.henrique.bussinessmanagement.model.enums.Unidades;
 import com.henrique.bussinessmanagement.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,11 +26,9 @@ public class ProdutoController {
     @GetMapping()
     public ModelAndView findAllProduto(){
         ModelAndView mv = new ModelAndView();
-
         List<Produto> produtos = produtoRepository.findAll();
-        mv.addObject(produtos);
+        mv.addObject("produtos", produtos);
         mv.setViewName("Produto");
-
 
         return mv;
     }
@@ -53,13 +52,16 @@ public class ProdutoController {
     }
 
     @GetMapping("/novo_produto")
-    public ModelAndView formularioNovoProduto(){
+    public ModelAndView formularioNovoProduto(RequisicaoProduto requisicaoProduto){
         ModelAndView mv = new ModelAndView();
+        List<String> unidades = Unidades.TodasUnidades();
+
         mv.setViewName("FormProduto");
+        mv.addObject("unidades",unidades);
 
         return mv;
     }
-    @PostMapping("/criar")
+    @PostMapping("/novo_produto/criar")
     public String cadastraNovoProduto(RequisicaoProduto requisicaoProduto){
         Produto produto = requisicaoProduto.toProduto();
 
@@ -67,5 +69,6 @@ public class ProdutoController {
 
         return "redirect:/produto";
     }
+
 
 }

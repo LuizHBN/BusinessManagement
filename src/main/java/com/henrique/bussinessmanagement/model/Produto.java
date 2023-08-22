@@ -10,7 +10,7 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String codigo;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Unidades unidade;
     private String descricao;
 

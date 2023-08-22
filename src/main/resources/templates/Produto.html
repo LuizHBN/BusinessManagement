@@ -1,10 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+    <head>
+        <title>Produtos</title>
+        <th:block th:replace="~{base ::head}">
+            <th:block th:attr="th:replace=${title}"></th:block>
+        </th:block>
+      </head>
 <body>
- Essa é a página de produtos
+    <div th:replace = "~{base :: navbar}"></div>
+    <a href="home" class="btn btn-primary" tabindex="-1" role="button" style="margin-left: 2vh; margin-top: 2vh;">
+        &#8592; Voltar
+    </a>
+
+    <div class="container">
+
+        <div class="title">
+            <h1>Produtos cadastrados</h1>
+        </div>
+    <!-- TODO: Adicionar barra de busca e funcionalidade de filtrar  -->
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Código</th>
+                    <th scope="col">Descrição</th>
+                    <th scope="col">Unidade</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="produto: ${produtos}">
+                    <td th:text="${produto.codigo}">Código</td>
+                    <td th:text="${produto.descricao}">Descrição</td>
+                    <td th:text="${produto.unidade}">Unidade</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <script th:replace="~{base ::script}"></script>
 </body>
 </html>

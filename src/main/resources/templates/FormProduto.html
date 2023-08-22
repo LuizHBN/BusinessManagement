@@ -1,11 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-Esse é o form de produto
+<html lang="pt-BR">
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produtos</title>
+  <th:block th:replace="~{base ::head}">
+    <th:block th:attr="th:replace=${title}"></th:block>
+  </th:block>
+</head>
+
+<body>
+  <div th:replace="~{base ::navbar}"></div>
+  <a href="/home" class="btn btn-primary" tabindex="-1" role="button" style="margin-left: 2vh; margin-top: 2vh;">
+    &#8592; Voltar
+  </a>
+
+  <div class="container">
+
+    <div class="title">
+      <h1>Cadastrar novo produto</h1>
+    </div>
+
+
+    <form th:object="${requisicaoProduto}" action="/produto/novo_produto/criar" method="POST">
+      <div class="mb-3">
+        <label for="descricao" class="form-label">Descrição do produto:</label>
+        <input th:field="*{descricao}" name="descricao" class="form-control" placeholder="Ex: Caneta bic cor azul" />
+      </div>
+
+      <div class="unidades">
+        <label for="dropdown-unidades" class="form-label">Selecione a unidade:</label>
+        <select th:field="*{unidade}" id="dropdown-unidades" class="form-select" aria-label="Default select example"
+          name="unidade">
+          <option value="" disabled selected>Selecione</option>
+          <option th:each="unidade: ${unidades}" th:value="${unidade}" th:text="${unidade}"></option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg">Cadastrar</button>
+
+    </form>
+
+
+
+  </div>
+
+
+
+
+
+  <script th:replace="~{base ::script}"></script>
 </body>
+
 </html>
