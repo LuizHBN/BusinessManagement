@@ -1,7 +1,9 @@
 package com.henrique.bussinessmanagement.model;
 
 import com.henrique.bussinessmanagement.model.enums.Unidades;
+import com.henrique.bussinessmanagement.model.enums.TipoProduto;
 import jakarta.persistence.*;
+import org.hibernate.validator.constraints.UniqueElements;
 
 @Entity
 public class Produto {
@@ -10,9 +12,15 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String codigo;
+    @Column(name = "unidade")
     @Enumerated(EnumType.STRING)
     private Unidades unidade;
+    @Column(name = "tipo_produto")
+    @Enumerated(EnumType.STRING)
+    private TipoProduto tipoProduto;
+
     private String descricao;
+
 
     public Produto() {
     }
@@ -22,6 +30,19 @@ public class Produto {
         this.codigo = codigo;
         this.unidade = unidade;
         this.descricao = descricao;
+    }
+
+    public String codigoByTipo(){
+        StringBuilder codigoBuilder = new StringBuilder();
+
+        switch (this.tipoProduto) {
+            case ESTOQUE -> codigoBuilder.append("ES");
+            case SERVICO -> codigoBuilder.append("SS");
+            case COMPRA_DIRETA -> codigoBuilder.append("CD");
+        }
+        codigoBuilder.append(this.id);
+
+        return codigoBuilder.toString();
     }
 
     public int getId() {
@@ -36,8 +57,8 @@ public class Produto {
         return codigo;
     }
 
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
+    public void setCodigo() {
+        this.codigo = codigoByTipo();
     }
 
     public Unidades getUnidade() {
@@ -48,6 +69,14 @@ public class Produto {
         this.unidade = unidade;
     }
 
+    public TipoProduto getTipoProduto() {
+        return tipoProduto;
+    }
+
+    public void setTipoProduto(TipoProduto tipoProduto) {
+        this.tipoProduto = tipoProduto;
+    }
+
     public String getDescricao() {
         return descricao;
     }
@@ -56,3 +85,5 @@ public class Produto {
         this.descricao = descricao;
     }
 }
+
+

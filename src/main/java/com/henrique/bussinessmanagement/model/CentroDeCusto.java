@@ -23,6 +23,13 @@ public class CentroDeCusto {
         this.descricao = descricao;
     }
 
+    public String codigoByTipo(){
+        String codigo = "CC" +
+                this.id;
+
+        return codigo;
+    }
+
     public int getId() {
         return id;
     }
@@ -35,8 +42,8 @@ public class CentroDeCusto {
         return codigo;
     }
 
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
+    public void setCodigo() {
+        codigo = codigoByTipo();
     }
 
     public String getDescricao() {

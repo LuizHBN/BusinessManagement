@@ -1,23 +1,29 @@
 package com.henrique.bussinessmanagement.dto;
 
 import com.henrique.bussinessmanagement.model.Produto;
+import com.henrique.bussinessmanagement.model.enums.TipoProduto;
 import com.henrique.bussinessmanagement.model.enums.Unidades;
-import jakarta.annotation.Nonnull;
+import jakarta.validation.constraints.NotBlank;
 
 
 public class RequisicaoProduto {
 
-    private String codigo;
 
+    private String codigo;
+    @NotBlank(message = "O produto deve possuir uma unidade!")
     private String unidade;
 
+    @NotBlank(message = "O produto deve possuir uma descrição!")
     private String descricao;
+    @NotBlank(message = "O produto deve possuir uma categoria!")
+    private String tipoProduto;
 
     public Produto toProduto(){
         Produto produto = new Produto();
-        produto.setCodigo(codigo);
         produto.setUnidade(Unidades.valueOf(unidade));
         produto.setDescricao(descricao);
+        produto.setTipoProduto(TipoProduto.valueOf(tipoProduto));
+        produto.setCodigo();
 
         return produto;
     }
@@ -44,5 +50,13 @@ public class RequisicaoProduto {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public String getTipoProduto() {
+        return tipoProduto;
+    }
+
+    public void setTipoProduto(String tipoProduto) {
+        this.tipoProduto = tipoProduto;
     }
 }
