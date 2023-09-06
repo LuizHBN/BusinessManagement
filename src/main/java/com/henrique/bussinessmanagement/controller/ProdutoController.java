@@ -1,8 +1,9 @@
 package com.henrique.bussinessmanagement.controller;
 
 
-import com.henrique.bussinessmanagement.dto.RequisicaoBuscaProduto;
+import com.henrique.bussinessmanagement.dto.RequisicaoBusca;
 import com.henrique.bussinessmanagement.dto.RequisicaoProduto;
+import com.henrique.bussinessmanagement.model.DetalheSolicitacaoDeCompra;
 import com.henrique.bussinessmanagement.model.Produto;
 import com.henrique.bussinessmanagement.model.enums.TipoProduto;
 import com.henrique.bussinessmanagement.model.enums.Unidades;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class ProdutoController {
     ProdutoRepository produtoRepository;
 
     @GetMapping()
-    public ModelAndView findAllProduto( RequisicaoBuscaProduto requisicaoBuscaProduto){
+    public ModelAndView findAllProduto(RequisicaoBusca requisicaoBusca){
         ModelAndView mv = new ModelAndView();
 
         List<Produto> produtos = produtoRepository.findAll();
@@ -36,8 +36,8 @@ public class ProdutoController {
     }
 
     @PostMapping("/buscar")
-    public ModelAndView findProduto(RequisicaoBuscaProduto requisicaoBuscaProduto) {
-        List<Produto> produtos = buscaProduto(requisicaoBuscaProduto);
+    public ModelAndView findProduto(RequisicaoBusca requisicaoBusca) {
+        List<Produto> produtos = buscaProduto(requisicaoBusca);
 
         ModelAndView mv = new ModelAndView();
         mv.addObject("produtos", produtos);
@@ -52,7 +52,7 @@ public class ProdutoController {
         return setProdutoForm();
     }
     @PostMapping("/novo/criar")
-    public ModelAndView cadastraNovoProduto(@Valid @ModelAttribute("requisicaoProduto") RequisicaoProduto requisicaoProduto, BindingResult result,  RedirectAttributes redirectAttributes) {
+    public ModelAndView cadastraNovoProduto(@Valid @ModelAttribute("requisicaoProduto") RequisicaoProduto requisicaoProduto, BindingResult result) {
         if (result.hasErrors()) {
             return setProdutoForm();
         }
@@ -63,7 +63,7 @@ public class ProdutoController {
 
         produtoRepository.save(salvo);
 
-        redirectAttributes.addFlashAttribute("redirect", true);
+
         return new ModelAndView("redirect:/produto");
 
     }
@@ -81,17 +81,18 @@ public class ProdutoController {
         return mv;
     }
 
-    public List<Produto> buscaProduto(RequisicaoBuscaProduto requisicaoBuscaProduto){
+    public List<Produto> buscaProduto(RequisicaoBusca requisicaoBusca){
         List<Produto> produtos;
 
-        if (requisicaoBuscaProduto.getAtributo().equalsIgnoreCase("descricao")){
-            produtos= produtoRepository.findByDescricao(requisicaoBuscaProduto.getValor());
+        if (requisicaoBusca.getAtributo().equalsIgnoreCase("descricao")){
+            produtos= produtoRepository.findByDescricao(requisicaoBusca.getValor());
         }
-        else if(requisicaoBuscaProduto.getAtributo().equalsIgnoreCase("codigo")){
-            produtos = produtoRepository.findByCodigo(requisicaoBuscaProduto.getValor());
+        else if(requisicaoBusca.getAtributo().equalsIgnoreCase("codigo")){
+            produtos = produtoRepository.findByCodigo(requisicaoBusca.getValor());
         }
         else produtos = produtoRepository.findAll();
 
         return produtos;
     }
+
 }

@@ -1,11 +1,11 @@
 package com.henrique.bussinessmanagement.dto;
 
-public class RequisicaoBuscaProduto {
+public class RequisicaoBusca {
 
     private String atributo;
     private String valor;
 
-    public RequisicaoBuscaProduto() {
+    public RequisicaoBusca() {
     }
 
     public String getAtributo() {

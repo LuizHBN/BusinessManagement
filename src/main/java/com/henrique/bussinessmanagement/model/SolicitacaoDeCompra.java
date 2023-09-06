@@ -17,6 +17,8 @@ public class SolicitacaoDeCompra {
     private Status status;
 
     public SolicitacaoDeCompra() {
+        this.setDataCriacao(LocalDate.now());
+        this.setStatus(Status.CRIADA);
     }
     public SolicitacaoDeCompra(int id, String codigo, LocalDate dataCriacao, Status status) {
         this.id = id;
@@ -24,6 +26,7 @@ public class SolicitacaoDeCompra {
         this.dataCriacao = dataCriacao;
         this.status = status;
     }
+
 
     public int getId() {
         return id;
@@ -37,8 +40,8 @@ public class SolicitacaoDeCompra {
         return codigo;
     }
 
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
+    public void setCodigo() {
+        this.codigo = "SC" + this.id;
     }
 
     public LocalDate getDataCriacao() {

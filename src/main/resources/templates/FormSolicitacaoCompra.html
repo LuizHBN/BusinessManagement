@@ -1,10 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nova solicitação de compra</title>
+  <th:block th:replace="~{base ::head}">
+    <th:block th:attr="th:replace=${title}"></th:block>
+  </th:block>
 </head>
+
 <body>
-Esse é o form de solicitacao de compras
+  <div th:replace="~{base ::navbar}"></div>
+  <div class="content">
+
+    <a th:href="@{/}" class="btn btn-primary" tabindex="-1" role="button"
+      style="margin-left: 2vh; margin-top: 2vh;">
+      &#8592; Voltar
+    </a>
+
+    <div class="container">
+
+      <div class="title">
+        <h1>Cadastrar nova Solicitação de Compra</h1>
+      </div>
+
+      <div id="formSectionContainer">
+      
+        <form th:object="${requisicaoDetalheSolicitacaoDeCompra}" action="/solicitacao_compra/nova/criar"
+          method="POST" class="form-solicitacao" enctype="application/x-www-form-urlencoded">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="unidades">
+                <label for="dropdown-produtos" class="form-label">Selecione o produto:</label>
+                <select th:field="*{idProduto}" th:errorclass="is-invalid" id="dropdown-unidades"
+                  class="form-select" aria-label="Default select example">
+                  <option value="" selected="selected"></option>
+                  <option value="" disabled selected>Selecione</option>
+                  <option th:each="produto: ${produtos}" th:value="${produto.id}"
+                    th:text="${produto.descricao}">
+                  </option>
+                </select>
+                <div class="invalid-feedback" th:errors="*{idProduto}">
+                  Erros do produto.
+                </div>
+              </div>
+            </div> 
+
+            <div class="col-md-3">
+              <div class="mb-3">
+                <label for="valor" class="form-label">Valor:</label>
+                <input th:field="*{valor}" th:errorclass="is-invalid" name="valor" class="form-control"
+                  placeholder="Ex: R$200,00" />
+                <div class="invalid-feedback" th:errors="*{valor}">
+                  Erros de valor
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-8">
+              <div class="cantros">
+                <label for="dropdown-centros" class="form-label">Selecione o centro de custo:</label>
+                <select th:field="*{idCentroDeCusto}" th:errorclass="is-invalid" id="dropdown-unidades"
+                  class="form-select" aria-label="Default select example">
+                  <option value="" selected="selected"></option>
+                  <option value="" disabled selected>Selecione</option>
+                  <option th:each="centroDeCusto: ${centrosDeCusto}" th:value="${centroDeCusto.id}"
+                    th:text="${centroDeCusto.descricao}"></option>
+                </select>
+                <div class="invalid-feedback" th:errors="*{idCentroDeCusto}">
+                  Erros do centro de custo.
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="mb-3">
+                <label for="quantidade" class="form-label">Quantidade: </label>
+                <input th:field="*{quantidade}" th:errorclass="is-invalid" name="quantidade" class="form-control"
+                  placeholder="Ex: 2" />
+                <div class="invalid-feedback" th:errors="*{quantidade}">
+                  Erros da quantidade.
+                </div>
+              </div>
+            </div>
+
+          </div>
+          </div>
+
+          <div class="add-button">
+            <button id="addFormSection" class="btn btn-success" type="button">+</button>
+          </div>
+          
+            
+          </div>
+        
+      </div>
+      <div class="submit">
+        <button type="submit" class="btn btn-primary btn-lg">Cadastrar</button>
+      </div>
+    </form>
+
+    </div>
+
+  </div>
+
+  <script th:replace="~{base ::script}"></script>
+  <script>
+    document.getElementById("addFormSection").addEventListener("click", function () {
+      var originalFormSection = document.querySelector("#formSectionContainer form");
+      var clonedFormSection = originalFormSection.cloneNode(true);
+
+      // Limpa os valores dos campos no formulário clonado (se necessário)
+      var inputFields = clonedFormSection.querySelectorAll("input, select");
+      inputFields.forEach(function (input) {
+        input.value = "";
+      });
+
+      // Adiciona margem inferior ao novo formulário clonado
+      clonedFormSection.classList.add("form-section");
+
+      // Adicione um botão "Remover" ao novo formulário clonado
+      var removeButton = document.createElement("button");
+      removeButton.className = "btn btn-danger";
+      removeButton.type = "button";
+      removeButton.textContent = "Remover";
+      removeButton.addEventListener("click", function () {
+        removerFormulario(this);
+      });
+      clonedFormSection.querySelector(".row").appendChild(removeButton);
+
+      document.getElementById("formSectionContainer").appendChild(clonedFormSection);
+    });
+
+    function removerFormulario(button) {
+      var formToRemove = button.closest("form");
+      if (formToRemove && formToRemove !== document.querySelector("#formSectionContainer form")) {
+        formToRemove.remove();
+      }
+    }
+  </script>
 </body>
+
 </html>

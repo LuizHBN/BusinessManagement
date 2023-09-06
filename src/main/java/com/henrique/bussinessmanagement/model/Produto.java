@@ -3,7 +3,8 @@ package com.henrique.bussinessmanagement.model;
 import com.henrique.bussinessmanagement.model.enums.Unidades;
 import com.henrique.bussinessmanagement.model.enums.TipoProduto;
 import jakarta.persistence.*;
-import org.hibernate.validator.constraints.UniqueElements;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 @Entity
 public class Produto {
@@ -44,6 +45,11 @@ public class Produto {
 
         return codigoBuilder.toString();
     }
+    @Override
+    public String toString(){
+        return this.getDescricao();
+    }
+
 
     public int getId() {
         return id;

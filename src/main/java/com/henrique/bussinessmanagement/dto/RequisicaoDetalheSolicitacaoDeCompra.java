@@ -1,68 +1,68 @@
 package com.henrique.bussinessmanagement.dto;
 
+import com.henrique.bussinessmanagement.controller.ProdutoController;
 import com.henrique.bussinessmanagement.model.CentroDeCusto;
 import com.henrique.bussinessmanagement.model.DetalheSolicitacaoDeCompra;
 import com.henrique.bussinessmanagement.model.Produto;
 import com.henrique.bussinessmanagement.model.SolicitacaoDeCompra;
+import com.henrique.bussinessmanagement.repository.CentroDeCustoRepository;
+import com.henrique.bussinessmanagement.repository.ProdutoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 
 public class RequisicaoDetalheSolicitacaoDeCompra {
-    private SolicitacaoDeCompra solicitacaoDeCompra;
-    private Produto produto;
-    private CentroDeCusto centroDeCusto;
-    private BigDecimal quantidade;
-    private BigDecimal valor;
 
-    public DetalheSolicitacaoDeCompra toDetalheSolicitacaoDeCompra(SolicitacaoDeCompra solicitacaoDeCompra){
+    private Integer idProduto;
+    private Integer idCentroDeCusto;
+    private int valor;
+    private int quantidade;
+
+
+    public DetalheSolicitacaoDeCompra toDetalheSolicitacaoDeCompra(Produto produto,CentroDeCusto centroDeCusto){
         DetalheSolicitacaoDeCompra detalheSolicitacaoDeCompra = new DetalheSolicitacaoDeCompra();
 
-        detalheSolicitacaoDeCompra.setSolicitacaoDeCompra(solicitacaoDeCompra);
-        detalheSolicitacaoDeCompra.setProduto(produto);
+        centroDeCusto.setId(idCentroDeCusto);
         detalheSolicitacaoDeCompra.setCentroDeCusto(centroDeCusto);
-        detalheSolicitacaoDeCompra.setQuantidade(quantidade);
-        detalheSolicitacaoDeCompra.setValor(valor);
+
+        produto.setId(idProduto);
+        detalheSolicitacaoDeCompra.setProduto(produto);
+
+        detalheSolicitacaoDeCompra.setQuantidade(BigDecimal.valueOf(this.quantidade));
+        detalheSolicitacaoDeCompra.setValor(BigDecimal.valueOf(this.valor));
 
         return detalheSolicitacaoDeCompra;
     }
 
-    public SolicitacaoDeCompra getSolicitacaoDeCompra() {
-        return solicitacaoDeCompra;
+    public Integer getIdProduto() {
+        return idProduto;
     }
 
-    public void setSolicitacaoDeCompra(SolicitacaoDeCompra solicitacaoDeCompra) {
-        this.solicitacaoDeCompra = solicitacaoDeCompra;
+    public void setIdProduto(Integer idProduto) {
+        this.idProduto = idProduto;
     }
 
-    public Produto getProduto() {
-        return produto;
+    public Integer getIdCentroDeCusto() {
+        return idCentroDeCusto;
     }
 
-    public void setProduto(Produto produto) {
-        this.produto = produto;
+    public void setIdCentroDeCusto(Integer idCentroDeCusto) {
+        this.idCentroDeCusto = idCentroDeCusto;
     }
 
-    public CentroDeCusto getCentroDeCusto() {
-        return centroDeCusto;
-    }
-
-    public void setCentroDeCusto(CentroDeCusto centroDeCusto) {
-        this.centroDeCusto = centroDeCusto;
-    }
-
-    public BigDecimal getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(BigDecimal quantidade) {
-        this.quantidade = quantidade;
-    }
-
-    public BigDecimal getValor() {
+    public int getValor() {
         return valor;
     }
 
-    public void setValor(BigDecimal valor) {
+    public void setValor(int valor) {
         this.valor = valor;
+    }
+
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
     }
 }

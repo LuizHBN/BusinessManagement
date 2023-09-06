@@ -29,6 +29,10 @@ public class CentroDeCusto {
 
         return codigo;
     }
+    @Override
+    public String toString(){
+        return this.getDescricao();
+    }
 
     public int getId() {
         return id;

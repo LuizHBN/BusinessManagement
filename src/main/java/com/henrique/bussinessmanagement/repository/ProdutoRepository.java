@@ -1,9 +1,5 @@
 package com.henrique.bussinessmanagement.repository;
-
 import com.henrique.bussinessmanagement.model.Produto;
-import com.henrique.bussinessmanagement.model.enums.Status;
-import jakarta.persistence.NamedNativeQuery;
-import jakarta.persistence.NamedQuery;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

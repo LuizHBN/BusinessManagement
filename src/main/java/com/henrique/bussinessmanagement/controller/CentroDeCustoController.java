@@ -1,13 +1,8 @@
 package com.henrique.bussinessmanagement.controller;
 
-import com.henrique.bussinessmanagement.dto.RequisicaoBuscaCentro;
-import com.henrique.bussinessmanagement.dto.RequisicaoBuscaProduto;
+import com.henrique.bussinessmanagement.dto.RequisicaoBusca;
 import com.henrique.bussinessmanagement.dto.RequisicaoCentroDeCusto;
-import com.henrique.bussinessmanagement.dto.RequisicaoProduto;
 import com.henrique.bussinessmanagement.model.CentroDeCusto;
-import com.henrique.bussinessmanagement.model.Produto;
-import com.henrique.bussinessmanagement.model.enums.TipoProduto;
-import com.henrique.bussinessmanagement.model.enums.Unidades;
 import com.henrique.bussinessmanagement.repository.CentroDeCustoRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +25,7 @@ public class CentroDeCustoController {
     CentroDeCustoRepository centroDeCustoRepository;
 
     @GetMapping()
-    public ModelAndView findAllCentroDeCusto(RequisicaoBuscaCentro requisicaoBuscaCentro){
+    public ModelAndView findAllCentroDeCusto(RequisicaoBusca requisicaoBusca){
         ModelAndView mv = new ModelAndView();
 
         List<CentroDeCusto> centrosDeCusto = centroDeCustoRepository.findAll();
@@ -41,8 +36,8 @@ public class CentroDeCustoController {
     }
 
     @PostMapping("/buscar")
-    public ModelAndView findCentroDeCusto(RequisicaoBuscaCentro requisicaoBuscaCentro) {
-        List<CentroDeCusto> centroDeCustos = buscaCentro(requisicaoBuscaCentro);
+    public ModelAndView findCentroDeCusto(RequisicaoBusca requisicaoBusca) {
+        List<CentroDeCusto> centroDeCustos = buscaCentro(requisicaoBusca);
 
         ModelAndView mv = new ModelAndView();
         mv.addObject("centrosDeCusto", centroDeCustos);
@@ -51,14 +46,14 @@ public class CentroDeCustoController {
         return mv;
     }
 
-    public List<CentroDeCusto> buscaCentro(RequisicaoBuscaCentro requisicaoBuscaCentro){
+    public List<CentroDeCusto> buscaCentro(RequisicaoBusca requisicaoBusca){
         List<CentroDeCusto> centros;
 
-        if (requisicaoBuscaCentro.getAtributo().equalsIgnoreCase("descricao")){
-            centros= centroDeCustoRepository.findByDescricao(requisicaoBuscaCentro.getValor());
+        if (requisicaoBusca.getAtributo().equalsIgnoreCase("descricao")){
+            centros= centroDeCustoRepository.findByDescricao(requisicaoBusca.getValor());
         }
-        else if(requisicaoBuscaCentro.getAtributo().equalsIgnoreCase("codigo")){
-            centros = centroDeCustoRepository.findByCodigo(requisicaoBuscaCentro.getValor());
+        else if(requisicaoBusca.getAtributo().equalsIgnoreCase("codigo")){
+            centros = centroDeCustoRepository.findByCodigo(requisicaoBusca.getValor());
         }
         else centros = centroDeCustoRepository.findAll();
 

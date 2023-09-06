@@ -10,14 +10,22 @@ public class DetalheSolicitacaoDeCompra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @ManyToOne @JoinColumn(name = "id_solicitacao")
+    @ManyToOne
+    @JoinColumn(name = "id_solicitacao")
     private SolicitacaoDeCompra solicitacaoDeCompra;
-    @ManyToOne @JoinColumn(name = "id_produto")
+    @ManyToOne
+    @JoinColumn(name = "id_produto")
     private Produto produto;
-    @ManyToOne @JoinColumn(name = "id_centro_de_custo")
+    @ManyToOne
+    @JoinColumn(name = "id_centro_de_custo")
     private CentroDeCusto centroDeCusto;
     private BigDecimal quantidade;
     private BigDecimal valor;
+
+    public void LinkToNewSolicitacao(SolicitacaoDeCompra solicitacaoDeCompra){
+
+        this.setSolicitacaoDeCompra(solicitacaoDeCompra);
+    }
 
     public DetalheSolicitacaoDeCompra() {
     }
