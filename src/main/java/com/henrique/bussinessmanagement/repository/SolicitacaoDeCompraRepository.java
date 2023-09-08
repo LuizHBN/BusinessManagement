@@ -11,6 +11,7 @@ public interface SolicitacaoDeCompraRepository extends JpaRepository<Solicitacao
     @Query("SELECT s FROM SolicitacaoDeCompra s")
     List<SolicitacaoDeCompra> findAll();
     List<SolicitacaoDeCompra> findById(int id);
+
     List<SolicitacaoDeCompra> findByCodigo(String codigo);
     List<SolicitacaoDeCompra> findByStatus(Status status);
 }
