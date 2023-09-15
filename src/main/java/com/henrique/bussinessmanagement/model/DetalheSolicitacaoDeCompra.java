@@ -1,6 +1,7 @@
 package com.henrique.bussinessmanagement.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
@@ -11,15 +12,17 @@ public class DetalheSolicitacaoDeCompra {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @ManyToOne
-    @JoinColumn(name = "id_solicitacao")
+    @JoinColumn(name = "id_solicitacao", nullable = false)
     private SolicitacaoDeCompra solicitacaoDeCompra;
     @ManyToOne
-    @JoinColumn(name = "id_produto")
+    @JoinColumn(name = "id_produto", nullable = false)
     private Produto produto;
     @ManyToOne
-    @JoinColumn(name = "id_centro_de_custo")
+    @JoinColumn(name = "id_centro_de_custo", nullable = false)
     private CentroDeCusto centroDeCusto;
+    @Column(nullable = false)
     private BigDecimal quantidade;
+    @Column(nullable = false)
     private BigDecimal valor;
 
     public void LinkToNewSolicitacao(SolicitacaoDeCompra solicitacaoDeCompra){

@@ -11,8 +11,11 @@ public class SolicitacaoDeCompra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(nullable = false)
     private String codigo;
+    @Column(nullable = false)
     private LocalDate dataCriacao;
+    @Column(nullable = false)
     @Enumerated
     private Status status;
 

@@ -75,7 +75,7 @@
             <div class="col-md-3">
               <div class="mb-3">
                 <label for="quantidade" class="form-label">Quantidade: </label>
-                <input th:field="*{quantidade}" th:errorclass="is-invalid" name="quantidade" class="form-control"
+                <input th:field="*{quantidade}" th:errorclass="is-invalid" name="quantidade" id="quantidade"  class="form-control"
                   placeholder="Ex: 2" />
                 <div class="invalid-feedback" th:errors="*{quantidade}">
                   Erros da quantidade.
@@ -97,21 +97,6 @@
   </div>
 
   <script th:replace="~{base ::script}"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      // Remova a máscara de moeda e configure o campo para aceitar valores decimais
-      $('#valor').inputmask('numeric', {
-        radixPoint: '.',
-        autoGroup: true,
-        digits: 2,
-        digitsOptional: false,
-        placeholder: '0',
-      });
-    });
-  </script>
-
-
 </body>
 
 </html>

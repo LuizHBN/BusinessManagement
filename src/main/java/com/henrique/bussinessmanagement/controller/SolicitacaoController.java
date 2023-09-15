@@ -13,8 +13,10 @@ import com.henrique.bussinessmanagement.repository.DetalheSolicitacaoDeCompraRep
 import com.henrique.bussinessmanagement.repository.ProdutoRepository;
 import com.henrique.bussinessmanagement.repository.SolicitacaoDeCompraRepository;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -82,33 +84,33 @@ public class SolicitacaoController {
 
     @GetMapping("/nova")
     public ModelAndView formularioNovaSolicitacaoDeCompra(RequisicaoDetalheSolicitacaoDeCompra requisicaoDetalheSolicitacaoDeCompra){
-        ModelAndView mv = new ModelAndView();
-
-        List<Produto> produtos = produtoRepository.findAll();
-        List<CentroDeCusto> centrosDeCustos = centroDeCustoRepository.findAll();
-
-        mv.addObject("produtos", produtos);
-        mv.addObject("centrosDeCusto", centrosDeCustos);
-        mv.setViewName("FormSolicitacaoCompra");
-
-        return mv;
+         return setSolicitacaoForm();
     }
 
     @PostMapping("/nova/criar")
     @Transactional
-    public ModelAndView cadastraNovaSolicitacaoDeCompra(RequisicaoDetalheSolicitacaoDeCompra requisicaoDetalhe){
-        SolicitacaoDeCompra solicitacaoDeCompra = new SolicitacaoDeCompra();
-        solicitacaoDeCompra = solicitacaoDeCompraRepository.save(solicitacaoDeCompra);
+    public ModelAndView cadastraNovaSolicitacaoDeCompra(@Valid RequisicaoDetalheSolicitacaoDeCompra requisicaoDetalhe, BindingResult result){
+        if (result.hasErrors()) {
+            return setSolicitacaoForm();
+        }
 
+        SolicitacaoDeCompra solicitacaoDeCompra = new SolicitacaoDeCompra();
+
+        solicitacaoDeCompra = solicitacaoDeCompraRepository.save(solicitacaoDeCompra);
         solicitacaoDeCompra.setCodigo();
         solicitacaoDeCompraRepository.save(solicitacaoDeCompra);
 
-        Optional<Produto> produto = produtoRepository.findById(requisicaoDetalhe.getIdProduto().longValue());
-        Optional<CentroDeCusto> centroDeCusto = centroDeCustoRepository.findById(requisicaoDetalhe.getIdCentroDeCusto().longValue());
 
-        DetalheSolicitacaoDeCompra detalheSolicitacaoDeCompra = requisicaoDetalhe.toDetalheSolicitacaoDeCompra(produto.get(), centroDeCusto.get());
-        detalheSolicitacaoDeCompra.LinkToNewSolicitacao(solicitacaoDeCompra);
-        detalheSolicitacaoDeCompraRepository.save(detalheSolicitacaoDeCompra);
+            Produto produto = produtoRepository.findById(requisicaoDetalhe.getIdProduto());
+            CentroDeCusto centroDeCusto = centroDeCustoRepository.findById(requisicaoDetalhe.getIdCentroDeCusto());
+
+
+            DetalheSolicitacaoDeCompra detalheSolicitacaoDeCompra = requisicaoDetalhe.toDetalheSolicitacaoDeCompra();
+            detalheSolicitacaoDeCompra.setProduto(produto);
+            detalheSolicitacaoDeCompra.setCentroDeCusto(centroDeCusto);
+
+            detalheSolicitacaoDeCompra.LinkToNewSolicitacao(solicitacaoDeCompra);
+            detalheSolicitacaoDeCompraRepository.save(detalheSolicitacaoDeCompra);
 
 
         return new ModelAndView("redirect:/solicitacao_compra");
@@ -174,6 +176,19 @@ public class SolicitacaoController {
             return true;
         } else
             return false;
+    }
+
+    public ModelAndView setSolicitacaoForm(){
+        ModelAndView mv = new ModelAndView();
+
+        List<Produto> produtos = produtoRepository.findAll();
+        List<CentroDeCusto> centrosDeCustos = centroDeCustoRepository.findAll();
+
+        mv.addObject("produtos", produtos);
+        mv.addObject("centrosDeCusto", centrosDeCustos);
+        mv.setViewName("FormSolicitacaoCompra");
+
+        return mv;
     }
 
 

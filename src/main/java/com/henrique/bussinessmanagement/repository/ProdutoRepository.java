@@ -11,6 +11,8 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 
     @Query("select p from Produto p where p.descricao like %?1%")
     List<Produto> findByDescricao(String descricao);
+    @Query("select p from Produto p where p.id =?1 ")
+    Produto findById(int id);
 
 
 
