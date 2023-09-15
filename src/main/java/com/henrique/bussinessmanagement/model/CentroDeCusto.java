@@ -1,9 +1,7 @@
 package com.henrique.bussinessmanagement.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class CentroDeCusto {
@@ -11,7 +9,9 @@ public class CentroDeCusto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(nullable = false)
     private String codigo;
+    @Column(nullable = false)
     private String descricao;
 
     public CentroDeCusto() {

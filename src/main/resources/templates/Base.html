@@ -1,0 +1,194 @@
+<head th:fragment ="head">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <title th:utext="${pageTitle}">Default Title</title>
+  <style>
+ 
+ .navbar {
+      background-color: #34495e;
+      padding-left: 15px;
+      position: fixed;
+      width: 100%;
+      z-index: 1000; 
+      height: 50px;
+    }
+    .logo-img{
+      width:40px;
+      height:40px;
+      margin:10px, 20px;
+      margin-right: 2px;
+
+    }
+    .nav-item{
+      margin-left: 10px;
+    }
+    .content{
+      padding: 50px 0;
+    }
+    .form-select {
+      direction: ltr;
+    }
+    .search{
+      float: right;
+      width: 65vh;
+      margin-bottom: 7vh;
+    }
+    
+    .valor{
+      width: 30%;
+    }
+    .table{
+      stroke-width: 2px;
+      stroke: #34495e;
+    }
+  
+    .dropdown {
+      margin-right: 20px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .background-image {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://free4kwallpapers.com/uploads/originals/2020/04/05/beijing-central-business-district-wallpaper.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      filter: blur(2px);
+
+      z-index: -1;
+    }
+
+    .btn {
+      color: #ffffff !important;
+      height: 60;
+      width: 120;
+    }
+
+    .title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 4vh;
+      margin-top: 2vh;
+    }
+
+    .welcome {
+      display: flex;
+      width: 100%;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding-top: 20px;
+      backdrop-filter: blur(18px);
+      margin-bottom: 10vh;
+      color: white;
+      -webkit-text-stroke: 0.5px black;
+
+    }
+
+    .card-time {
+
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 40vh;
+      width: 68vh;
+      border-radius: 30px;
+      backdrop-filter: blur(15px);
+    }
+
+    .time {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 70vh;
+      font-size: 60px;
+      -webkit-text-stroke: 0.5px black;
+      color: white;
+
+    }
+
+    .greeting {
+      font-size: 40px;
+    }
+
+    .time-container {
+      font-size: 90px;
+      text-align: center;
+    }
+
+    .submit {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 4vh;
+    }
+    .form-solicitacao{
+      margin-bottom: 10vh;
+    }
+    .add-button{
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+
+<nav th:fragment = "navbar" class="navbar navbar-expand-lg navbar-light">
+    <img class ="logo-img"src="https://t.ctcdn.com.br/P7-_JvQTS4U7-if6zHyXjyMiNQ8=/400x400/smart/i606944.png"
+      alt="" style="margin-right: 20px;">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <div class="dropdown">
+            <a class="btn dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Produto
+            </a>
+
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/produto">Visualizar produtos</a></li>
+              <li><a class="dropdown-item" href="/produto/novo">Criar produto</a></li>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item">
+          <div class="dropdown">
+            <a class="btn dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Centro de custo
+            </a>
+
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/centro_de_custo">Visualizar centros de custo</a></li>
+              <li><a class="dropdown-item" href="/centro_de_custo/novo">Criar centro de custo</a></li>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item">
+          <div class="dropdown">
+            <a class="btn dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Solicitação de compra
+            </a>
+
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/solicitacao_compra">Visualizar solicitações de compra</a></li>
+              <li><a class="dropdown-item" href="/solicitacao_compra/nova">Criar solicitação de compra</a></li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <script th:fragment = "script" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>

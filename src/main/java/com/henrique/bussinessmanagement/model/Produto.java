@@ -12,14 +12,15 @@ public class Produto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(nullable = false)
     private String codigo;
-    @Column(name = "unidade")
+    @Column(name = "unidade", nullable = false)
     @Enumerated(EnumType.STRING)
     private Unidades unidade;
-    @Column(name = "tipo_produto")
+    @Column(name = "tipo_produto", nullable = false)
     @Enumerated(EnumType.STRING)
     private TipoProduto tipoProduto;
-
+    @Column(nullable = false)
     private String descricao;
 
 

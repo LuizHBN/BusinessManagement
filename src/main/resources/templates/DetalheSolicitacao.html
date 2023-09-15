@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Detalhes da Solicitação</title>
+    <th:block th:replace="~{base ::head}">
+        <th:block th:attr="th:replace=${title}"></th:block>
+    </th:block>
+</head>
+
+<body>
+<div th:replace="~{base :: navbar}"></div>
+<div class="content">
+    <a th:href="@{/}" class="btn btn-primary" tabindex="-1" role="button"
+       style="margin-left: 2vh; margin-top: 2vh;">
+        &#8592; Voltar
+    </a>
+
+    <div class="container">
+        <div class="title">
+            <h1>Detalhes da Solicitação de compra</h1>
+        </div>
+
+
+        <div class="solicitacao" th:each="solicitacao: ${solicitacaoDeCompra}">
+            <p>Código: <span th:text="${solicitacao.codigo}"></span></p>
+            <p>Data de criação: <span th:text="${solicitacao.dataCriacao}"></span></p>
+            <p>Status: <span th:text="${solicitacao.status}"></span></p>
+        </div>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Produto:</th>
+                <th scope="col">Centro de Custo:</th>
+                <th scope="col">Quantidade:</th>
+                <th scope="col">Valor:</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="detalheSolicitacao: ${detalhesSolicitacao}">
+                <td th:text="${detalheSolicitacao.produto}">Produto</td>
+                <td th:text="${detalheSolicitacao.centroDeCusto}">Centro de custo</td>
+                <td th:text="${detalheSolicitacao.quantidade}">Quantidade</td>
+                <td th:text="${detalheSolicitacao.valor}">Valor</td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<script th:replace="~{base ::script}"></script>
+</body>
+
+</html>

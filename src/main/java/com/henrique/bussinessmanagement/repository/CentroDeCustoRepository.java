@@ -14,5 +14,7 @@ public interface CentroDeCustoRepository extends JpaRepository<CentroDeCusto, Lo
 
     @Query("select c from CentroDeCusto c where c.descricao like %?1%")
     List<CentroDeCusto> findByDescricao(String descricao);
+    @Query("select c from CentroDeCusto c where c.id = ?1")
+    CentroDeCusto findById(int id);
 
 }

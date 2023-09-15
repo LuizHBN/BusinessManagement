@@ -3,26 +3,24 @@ package com.henrique.bussinessmanagement.dto;
 import com.henrique.bussinessmanagement.model.CentroDeCusto;
 import com.henrique.bussinessmanagement.model.DetalheSolicitacaoDeCompra;
 import com.henrique.bussinessmanagement.model.Produto;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
 public class RequisicaoDetalheSolicitacaoDeCompra {
-
+    @NotNull(message = "Selecione um produto")
     private Integer idProduto;
+    @NotNull(message = "Selecione um centro de custo")
     private Integer idCentroDeCusto;
+    @NotBlank(message = "Insíra um valor")
     private String valor;
+    @NotNull(message = "Insira a quantidade")
     private double quantidade;
 
 
-    public DetalheSolicitacaoDeCompra toDetalheSolicitacaoDeCompra(Produto produto,CentroDeCusto centroDeCusto){
+    public DetalheSolicitacaoDeCompra toDetalheSolicitacaoDeCompra(){
         DetalheSolicitacaoDeCompra detalheSolicitacaoDeCompra = new DetalheSolicitacaoDeCompra();
-
-        centroDeCusto.setId(idCentroDeCusto);
-        detalheSolicitacaoDeCompra.setCentroDeCusto(centroDeCusto);
-
-        produto.setId(idProduto);
-        detalheSolicitacaoDeCompra.setProduto(produto);
-
 
         detalheSolicitacaoDeCompra.setQuantidade(BigDecimal.valueOf(this.quantidade));
         detalheSolicitacaoDeCompra.setValor(BigDecimal.valueOf(Double.parseDouble(this.valor)));
