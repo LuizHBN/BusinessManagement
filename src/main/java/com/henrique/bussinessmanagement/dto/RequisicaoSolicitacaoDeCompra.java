@@ -1,11 +1,9 @@
 package com.henrique.bussinessmanagement.dto;
 
-import com.henrique.bussinessmanagement.model.SolicitacaoDeCompra;
-import com.henrique.bussinessmanagement.model.enums.Status;
-
 public class RequisicaoSolicitacaoDeCompra {
     private String codigo;
     private String status;
+
 
 
     public String getCodigo() {

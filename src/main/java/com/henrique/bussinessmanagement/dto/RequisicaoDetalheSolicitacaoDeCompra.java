@@ -1,9 +1,6 @@
 package com.henrique.bussinessmanagement.dto;
 
-import com.henrique.bussinessmanagement.model.CentroDeCusto;
 import com.henrique.bussinessmanagement.model.DetalheSolicitacaoDeCompra;
-import com.henrique.bussinessmanagement.model.Produto;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
@@ -13,17 +10,39 @@ public class RequisicaoDetalheSolicitacaoDeCompra {
     private Integer idProduto;
     @NotNull(message = "Selecione um centro de custo")
     private Integer idCentroDeCusto;
-    @NotBlank(message = "Insíra um valor")
-    private String valor;
+    @NotNull(message = "Insíra um valor")
+    private BigDecimal valor;
     @NotNull(message = "Insira a quantidade")
-    private double quantidade;
+    private BigDecimal quantidade;
 
+    public boolean isValid(){
+        if (this.getIdProduto()!= 0){
+            if (this.getQuantidade() == null || this.getQuantidade().intValue() == 0){
+                return false;
+            }if (this.getValor() == null || this.getValor().intValue() == 0){
+                return false;
+            }
+            return this.getIdCentroDeCusto() != null && this.getIdCentroDeCusto() != 0;
+        }
+        return true;
+    }
+    public boolean isFirstValid(){
+        if (this.getIdProduto() == null || this.getIdProduto() == 0){
+            return false;
+        }
+        if (this.getQuantidade() == null || this.getQuantidade().intValue() == 0){
+            return false;
+        }if (this.getValor() == null || this.getValor().intValue() == 0){
+            return false;
+        }
+        return this.getIdCentroDeCusto() != null && this.getIdCentroDeCusto() != 0;
+}
 
     public DetalheSolicitacaoDeCompra toDetalheSolicitacaoDeCompra(){
         DetalheSolicitacaoDeCompra detalheSolicitacaoDeCompra = new DetalheSolicitacaoDeCompra();
 
-        detalheSolicitacaoDeCompra.setQuantidade(BigDecimal.valueOf(this.quantidade));
-        detalheSolicitacaoDeCompra.setValor(BigDecimal.valueOf(Double.parseDouble(this.valor)));
+        detalheSolicitacaoDeCompra.setQuantidade(this.quantidade);
+        detalheSolicitacaoDeCompra.setValor(this.valor);
 
         return detalheSolicitacaoDeCompra;
     }
@@ -44,19 +63,19 @@ public class RequisicaoDetalheSolicitacaoDeCompra {
         this.idCentroDeCusto = idCentroDeCusto;
     }
 
-    public String getValor() {
+    public BigDecimal getValor() {
         return valor;
     }
 
-    public void setValor(String valor) {
+    public void setValor(BigDecimal valor) {
         this.valor = valor;
     }
 
-    public double getQuantidade() {
+    public BigDecimal getQuantidade() {
         return quantidade;
     }
 
-    public void setQuantidade(double quantidade) {
+    public void setQuantidade(BigDecimal quantidade) {
         this.quantidade = quantidade;
     }
 }

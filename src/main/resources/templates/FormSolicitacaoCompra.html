@@ -26,76 +26,118 @@
 
       <div id="formSectionContainer">
 
-        <form th:object="${requisicaoDetalheSolicitacaoDeCompra}" action="/solicitacao_compra/nova/criar" method="POST"
-          class="form-solicitacao" enctype="application/x-www-form-urlencoded">
-          <div class="row">
-            <div class="col-md-8">
-              <div class="unidades">
-                <label for="dropdown-produtos" class="form-label">Selecione o produto:</label>
-                <select th:field="*{idProduto}" th:errorclass="is-invalid" id="dropdown-produtos" class="form-select"
-                  aria-label="Default select example">
-                  <option value="" selected="selected"></option>
-                  <option value="" disabled selected>Selecione</option>
-                  <option th:each="produto: ${produtos}" th:value="${produto.id}" th:text="${produto.descricao}">
-                  </option>
-                </select>
-                <div class="invalid-feedback" th:errors="*{idProduto}">
-                  Erros do produto.
+        <form th:object="${requisicoes}" action="/solicitacao_compra/nova/criar" method="POST" class="form-solicitacao"
+          enctype="application/x-www-form-urlencoded">
+          <div th:each="requisicao, iterStat : *{detalhes}">
+            <div class="row detalhes" th:id="'detalhe-' + ${iterStat.index}">
+              <div class="col-md-8">
+                <div class="unidades">
+                  <label for="dropdown-produtos" class="form-label"
+                    th:text=" 'Selecione o produto ' + ${iterStat.index + 1}">Selecione o produto:</label>
+                  <select th:field="*{detalhes[__${iterStat.index}__].idProduto}" th:errorclass="is-invalid"
+                    id="dropdown-produtos" class="form-select" aria-label="Default select example">
+                    <option class="selecione-default" value="0" th:selected="${true}">Selecione</option>
+                    <option th:each="produto: ${produtos}" th:value="${produto.id}" th:text="${produto.descricao}">
+                    </option>
+                  </select>
+                  <div class="invalid-feedback" th:errors="*{detalhes[__${iterStat.index}__].idProduto}">
+                    Erros do produto.
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div class="col-md-3">
-              <div class="mb-3">
-                <label for="valor" class="form-label">Valor:</label>
-                <input th:field="*{valor}" th:errorclass="is-invalid"  name="valor" id="valor" class="form-control"
-                  placeholder="Ex: R$200,00" />
-                <div class="invalid-feedback" th:errors="*{valor}">
-                  Erros de valor
+              <div class="col-md-3">
+                <div class="mb-3">
+                  <label for="valor" class="form-label">Valor:</label>
+                  <input th:field="*{detalhes[__${iterStat.index}__].valor}" th:errorclass="is-invalid" name="valor"
+                    id="valor" class="form-control" placeholder="Ex: R$200,00" />
+                  <div class="invalid-feedback" th:errors="*{detalhes[__${iterStat.index}__].valor}">
+                    Erros de valor
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div class="col-md-8">
-              <div class="centros">
-                <label for="dropdown-centros" class="form-label">Selecione o centro de custo:</label>
-                <select th:field="*{idCentroDeCusto}" th:errorclass="is-invalid" id="dropdown-centros"
-                  class="form-select" aria-label="Default select example">
-                  <option value="" selected="selected"></option>
-                  <option value="" disabled selected>Selecione</option>
-                  <option th:each="centroDeCusto: ${centrosDeCusto}" th:value="${centroDeCusto.id}"
-                    th:text="${centroDeCusto.descricao}"></option>
-                </select>
-                <div class="invalid-feedback" th:errors="*{idCentroDeCusto}">
-                  Erros do centro de custo.
+              <div class="col-md-8">
+                <div class="centros">
+                  <label for="dropdown-centros" class="form-label">Selecione o centro de custo:</label>
+                  <select th:field="*{detalhes[__${iterStat.index}__].idCentroDeCusto}" th:errorclass="is-invalid"
+                    id="dropdown-centros" class="form-select" aria-label="Default select example">
+                    <option class="selecione-default" value="0" th:selected="${true}">Selecione</option>
+                    <option value="" disabled selected>Selecione</option>
+                    <option th:each="centroDeCusto: ${centrosDeCusto}" th:value="${centroDeCusto.id}"
+                      th:text="${centroDeCusto.descricao}"></option>
+                  </select>
+                  <div class="invalid-feedback" th:errors="*{detalhes[__${iterStat.index}__].idCentroDeCusto}">
+                    Erros do centro de custo.
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div class="col-md-3">
-              <div class="mb-3">
-                <label for="quantidade" class="form-label">Quantidade: </label>
-                <input th:field="*{quantidade}" th:errorclass="is-invalid" name="quantidade" id="quantidade"  class="form-control"
-                  placeholder="Ex: 2" />
-                <div class="invalid-feedback" th:errors="*{quantidade}">
-                  Erros da quantidade.
+              <div class="col-md-3">
+                <div class="mb-3">
+                  <label for="quantidade" class="form-label">Quantidade: </label>
+                  <input th:field="*{detalhes[__${iterStat.index}__].quantidade}" th:errorclass="is-invalid"
+                    name="quantidade" id="quantidade" class="form-control" placeholder="Ex: 2" />
+                  <div class="invalid-feedback" th:errors="*{detalhes[__${iterStat.index}__].idCentroDeCusto}">
+                    Erros da quantidade.
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+          <button type="button" class="btn btn-danger" onclick="removerDetalhe()">Remover</button>
+          <button type="button" class="btn btn-success" onclick="novoDetalhe()">Adicionar</button>
+          <div class="submit">
+            <button id="submit-button" type="submit" class="btn btn-primary btn-lg">Cadastrar</button>
+          </div>
+        </form>
 
-
+      </div>
 
     </div>
-    <div class="submit">
-      <button id="submit-button" type="submit" class="btn btn-primary btn-lg">Cadastrar</button>
-    </div>
-    </form>
 
   </div>
+  <script>
+    var contadorDetalhes = 1;
+    var escondido = false;
 
-  </div>
+    if (!escondido) {
+      esconderDetalhes();
+      escondido = true;
+    }
 
+    function esconderDetalhes() {
+      for (var i = contadorDetalhes; i < 8; i++) {
+        var detalhe = document.getElementById("detalhe-" + i);
+        if (detalhe) {
+          detalhe.style.display = 'none';
+        }
+      }
+    }
+
+    function novoDetalhe() {
+      var detalhe = document.getElementById("detalhe-" + contadorDetalhes);
+      detalhe.style.display = 'flex';
+      contadorDetalhes++;
+    }
+
+    function removerDetalhe() {
+      if (contadorDetalhes != 1) {
+        contadorDetalhes--;
+        var detalhe = document.getElementById("detalhe-" + contadorDetalhes);
+        detalhe.style.display = 'none';
+        var inputs = detalhe.querySelectorAll("input");
+        inputs.forEach(function (input) {
+          input.value = "0";
+        });
+        var selects = detalhe.querySelectorAll("select");
+        selects.forEach(function (select) {
+          select.value = "0";
+        })
+      }
+    }
+
+  </script>
   <script th:replace="~{base ::script}"></script>
 </body>
 
