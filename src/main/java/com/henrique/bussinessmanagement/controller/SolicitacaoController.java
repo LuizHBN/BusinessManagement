@@ -77,7 +77,6 @@ public class SolicitacaoController {
         return mv;
     }
 
-
     @GetMapping("/nova")
     public ModelAndView formularioNovaSolicitacaoDeCompra(RequisicaoDetalheSolicitacaoDeCompra requisicaoDetalhe){
          return setSolicitacaoForm();
