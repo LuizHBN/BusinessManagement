@@ -1,9 +1,9 @@
 package com.henrique.bussinessmanagement.controller;
 
 
-import com.henrique.bussinessmanagement.dto.RequisicaoBusca;
-import com.henrique.bussinessmanagement.dto.RequisicaoDetalheSolicitacaoDeCompra;
-import com.henrique.bussinessmanagement.dto.RequisicaoSolicitacaoWrapper;
+import com.henrique.bussinessmanagement.dto.BuscaDTO;
+import com.henrique.bussinessmanagement.dto.DetalheSolicitacaoDeCompraDTO;
+import com.henrique.bussinessmanagement.dto.SolicitacaoWrapper;
 import com.henrique.bussinessmanagement.model.CentroDeCusto;
 import com.henrique.bussinessmanagement.model.DetalheSolicitacaoDeCompra;
 import com.henrique.bussinessmanagement.model.Produto;
@@ -19,6 +19,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +38,7 @@ public class SolicitacaoController {
     CentroDeCustoRepository centroDeCustoRepository;
 
     @GetMapping()
-    public ModelAndView findAllSolicitacaoDeCompra(RequisicaoBusca requisicaoBusca){
+    public ModelAndView findAllSolicitacaoDeCompra(BuscaDTO buscaDTO){
         ModelAndView mv = new ModelAndView();
 
         List<SolicitacaoDeCompra> solicitacoesDeCompra = solicitacaoDeCompraRepository.findAll();
@@ -47,8 +49,8 @@ public class SolicitacaoController {
     }
 
     @PostMapping("/buscar")
-    public ModelAndView findSolicitacao(RequisicaoBusca requisicaoBusca) {
-        List<SolicitacaoDeCompra> solicitacoes = buscaSolicitacao(requisicaoBusca);
+    public ModelAndView findSolicitacao(BuscaDTO buscaDTO) {
+        List<SolicitacaoDeCompra> solicitacoes = buscaSolicitacao(buscaDTO);
 
         ModelAndView mv = new ModelAndView();
         mv.addObject("solicitacoesDeCompra", solicitacoes);
@@ -59,7 +61,6 @@ public class SolicitacaoController {
 
     @GetMapping("/detalhes/{ParamId}")
     public ModelAndView showDetalheSolicitacao(@PathVariable String ParamId) {
-        //TODO -> Gerar erro caso o parâmetro não for válido
 
         int id = Integer.parseInt(ParamId);
         SolicitacaoDeCompra solicitacaoDeCompra = solicitacaoDeCompraRepository.findById(id).get(0);
@@ -78,17 +79,17 @@ public class SolicitacaoController {
     }
 
     @GetMapping("/nova")
-    public ModelAndView formularioNovaSolicitacaoDeCompra(RequisicaoDetalheSolicitacaoDeCompra requisicaoDetalhe){
+    public ModelAndView formularioNovaSolicitacaoDeCompra(DetalheSolicitacaoDeCompraDTO requisicaoDetalhe){
          return setSolicitacaoForm();
     }
 
     public ModelAndView setSolicitacaoForm(){
         ModelAndView mv = new ModelAndView();
 
-        RequisicaoSolicitacaoWrapper requisicaoSolicitacaoWrapper = new RequisicaoSolicitacaoWrapper();
+        SolicitacaoWrapper solicitacaoWrapper = new SolicitacaoWrapper();
 
         for(int i = 0; i<8; i++) {
-            requisicaoSolicitacaoWrapper.addRequisicaoDetalhe(new RequisicaoDetalheSolicitacaoDeCompra());
+            solicitacaoWrapper.addRequisicaoDetalhe(new DetalheSolicitacaoDeCompraDTO());
         }
 
         List<Produto> produtos = produtoRepository.findAll();
@@ -97,7 +98,7 @@ public class SolicitacaoController {
 
         mv.addObject("produtos", produtos);
         mv.addObject("centrosDeCusto", centrosDeCustos);
-        mv.addObject("requisicoes", requisicaoSolicitacaoWrapper);
+        mv.addObject("requisicoes", solicitacaoWrapper);
         mv.setViewName("FormSolicitacaoCompra");
 
         return mv;
@@ -105,65 +106,87 @@ public class SolicitacaoController {
 
     @PostMapping("/nova/criar")
     @Transactional
-    public ModelAndView cadastraNovaSolicitacaoDeCompra(@ModelAttribute RequisicaoSolicitacaoWrapper requisicao, BindingResult result){
+    public ModelAndView cadastraNovaSolicitacaoDeCompra(@ModelAttribute SolicitacaoWrapper requisicao, BindingResult result){
        if(!requisicao.isValid()){
            return setSolicitacaoForm();
        }
-        SolicitacaoDeCompra solicitacaoDeCompra = new SolicitacaoDeCompra();
-
-        solicitacaoDeCompra = solicitacaoDeCompraRepository.save(solicitacaoDeCompra);
-        solicitacaoDeCompra.setCodigo();
-        solicitacaoDeCompraRepository.save(solicitacaoDeCompra);
-
-        for (RequisicaoDetalheSolicitacaoDeCompra requisicaoDetalhe : requisicao.getDetalhes()) {
-            if (requisicaoDetalhe.getIdProduto() != 0) {
-                Produto produto = produtoRepository.findById(requisicaoDetalhe.getIdProduto());
-                CentroDeCusto centroDeCusto = centroDeCustoRepository.findById(requisicaoDetalhe.getIdProduto());
-                DetalheSolicitacaoDeCompra detalheSolicitacaoDeCompra = requisicaoDetalhe.toDetalheSolicitacaoDeCompra();
-                detalheSolicitacaoDeCompra.setProduto(produto);
-                detalheSolicitacaoDeCompra.setCentroDeCusto(centroDeCusto);
-
-                detalheSolicitacaoDeCompra.LinkToNewSolicitacao(solicitacaoDeCompra);
-                detalheSolicitacaoDeCompraRepository.save(detalheSolicitacaoDeCompra);
-
-            }
-        }
+        saveAllDetalhes(requisicao);
 
         return new ModelAndView("redirect:/solicitacao_compra");
     }
 
-    public List<SolicitacaoDeCompra> buscaSolicitacao(RequisicaoBusca requisicaoBusca){
+    public List<SolicitacaoDeCompra> buscaSolicitacao(BuscaDTO buscaDTO){
         List<SolicitacaoDeCompra> solicitacoes = new ArrayList<>();
 
-        switch (requisicaoBusca.getAtributo().toLowerCase()) {
+        switch (buscaDTO.getAtributo().toLowerCase()) {
             case "produto" -> {
-                if (validProduto(requisicaoBusca.getValor())) {
-                    Produto produto = produtoRepository.findByCodigo(requisicaoBusca.getValor()).get(0);
-                    List<DetalheSolicitacaoDeCompra> detalhes = detalheSolicitacaoDeCompraRepository.findByProduto(produto);
-                    solicitacoes.add(detalhes.get(0).getSolicitacaoDeCompra());
+                if (validProduto(buscaDTO.getValor())) {
+                    List<Produto> produtos = produtoRepository.findByCodigo(buscaDTO.getValor());
+                        List<DetalheSolicitacaoDeCompra> detalhes = detalheSolicitacaoDeCompraRepository.findByProduto(produtos.get(0));
+                    for (DetalheSolicitacaoDeCompra detalhe : detalhes) {
+                        solicitacoes.add(detalhe.getSolicitacaoDeCompra());
+                    }
                 } else return solicitacoes;
             }
             case "codigo" -> {
-                if (validCodigo(requisicaoBusca.getValor())) {
-                    solicitacoes.add(solicitacaoDeCompraRepository.findByCodigo(requisicaoBusca.getValor()).get(0));
+                if (validCodigo(buscaDTO.getValor())) {
+                    solicitacoes.add(solicitacaoDeCompraRepository.findByCodigo(buscaDTO.getValor()).get(0));
                 } else return solicitacoes;
             }
             case "centro" -> {
-                if (validCentroDeCusto(requisicaoBusca.getValor())) {
-                    CentroDeCusto centroDeCusto = centroDeCustoRepository.findByCodigo(requisicaoBusca.getValor()).get(0);
+                if (validCentroDeCusto(buscaDTO.getValor())) {
+                    CentroDeCusto centroDeCusto = centroDeCustoRepository.findByCodigo(buscaDTO.getValor()).get(0);
                     List<DetalheSolicitacaoDeCompra> detalhes = detalheSolicitacaoDeCompraRepository.findByCentroDeCusto(centroDeCusto);
-                    solicitacoes.add(detalhes.get(0).getSolicitacaoDeCompra());
+                    for (DetalheSolicitacaoDeCompra detalhe : detalhes) {
+                        solicitacoes.add(detalhe.getSolicitacaoDeCompra());
+                    }
                 } else return solicitacoes;
             }
             case "status" -> {
-                if (validStatus(requisicaoBusca.getValor())){
-                    solicitacoes.addAll(solicitacaoDeCompraRepository.findByStatus(Status.valueOf(requisicaoBusca.getValor())));
+                if (validStatus(buscaDTO.getValor())){
+                    solicitacoes.addAll(solicitacaoDeCompraRepository.findByStatus(Status.valueOf(buscaDTO.getValor())));
                 }
 
 
             }
         }
          return solicitacoes;
+    }
+
+public SolicitacaoDeCompra createSolicitacaoDeCompra(){
+    SolicitacaoDeCompra solicitacaoDeCompra = new SolicitacaoDeCompra();
+
+    solicitacaoDeCompra = solicitacaoDeCompraRepository.save(solicitacaoDeCompra);
+    solicitacaoDeCompra.setCodigo();
+    solicitacaoDeCompraRepository.save(solicitacaoDeCompra);
+
+    return solicitacaoDeCompra;
+}
+
+public void saveAllDetalhes(SolicitacaoWrapper wrapper){
+        SolicitacaoDeCompra solicitacaoDeCompra = createSolicitacaoDeCompra();
+
+    for (DetalheSolicitacaoDeCompraDTO requisicaoDetalhe : wrapper.getDetalhes()) {
+        if (requisicaoDetalhe.getIdProduto() != 0) {
+            Produto produto = produtoRepository.findById(requisicaoDetalhe.getIdProduto());
+            CentroDeCusto centroDeCusto = centroDeCustoRepository.findById(requisicaoDetalhe.getIdCentroDeCusto());
+            DetalheSolicitacaoDeCompra detalheSolicitacaoDeCompra = requisicaoDetalhe.toDetalheSolicitacaoDeCompra();
+            detalheSolicitacaoDeCompra.setProduto(produto);
+            detalheSolicitacaoDeCompra.setCentroDeCusto(centroDeCusto);
+            detalheSolicitacaoDeCompra.setValorTotal();
+
+            detalheSolicitacaoDeCompra.LinkToNewSolicitacao(solicitacaoDeCompra);
+            detalheSolicitacaoDeCompraRepository.save(detalheSolicitacaoDeCompra);
+            solicitacaoDeCompra.setValorTotal(BigDecimal.valueOf(solicitacaoDeCompraRepository.ValorTotal(solicitacaoDeCompra)));
+
+        }
+    }
+
+}
+
+    public void getValorTotal(){
+        double valorTotal;
+
     }
 
     public boolean validCodigo (String valor){

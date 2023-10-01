@@ -3,6 +3,7 @@ package com.henrique.bussinessmanagement.model;
 import com.henrique.bussinessmanagement.model.enums.Status;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -11,13 +12,14 @@ public class SolicitacaoDeCompra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(nullable = false)
+
     private String codigo;
     @Column(nullable = false)
     private LocalDate dataCriacao;
     @Column(nullable = false)
     @Enumerated
     private Status status;
+    private BigDecimal valorTotal;
 
     public SolicitacaoDeCompra() {
         this.setDataCriacao(LocalDate.now());
@@ -61,5 +63,17 @@ public class SolicitacaoDeCompra {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public BigDecimal getValorTotal() {
+        return valorTotal;
+    }
+
+    public void setValorTotal(BigDecimal valorTotal) {
+        this.valorTotal = valorTotal;
     }
 }

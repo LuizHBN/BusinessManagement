@@ -22,7 +22,7 @@
             </div>
 
             <div class="search">
-                <form class="form-inline" th:object="${requisicaoBusca}"
+                <form class="form-inline" th:object="${buscaDTO}"
                     action="/solicitacao_compra/buscar" method="POST">
                     <div class="form-group">
                         <label for="valor">Pesquise na lista de Solicitações de Compra:</label>
@@ -54,6 +54,7 @@
                         <th scope="col">Código</th>
                         <th scope="col">Data de Criação</th>
                         <th scope="col">Status</th>
+                        <th scope="col">Valor</th>
                         <th scope="col">Mais detalhes</th>
                     </tr>
                 </thead>
@@ -62,6 +63,7 @@
                         <td th:text="${solicitacao.codigo}">Código</td>
                         <td th:text="${solicitacao.dataCriacao}">Data de criação</td>
                         <td th:text="${solicitacao.status}">status</td>
+                        <td th:text="${solicitacao.valorTotal}">valorTotal</td>
                         <td>
                             <a th:href="@{/solicitacao_compra/detalhes/{id}(id=${solicitacao.id})}" class="btn btn-primary">Mais detalhes</a>
                         </td>
@@ -69,15 +71,9 @@
                 </tbody>
             </table>
         </div>
-
-
-
-
-
-
     </div>
 
-    <script th:replace="~{base ::script}"></script>
+    <script th:replace="~{base ::scriptBootstrap}"></script>
 </body>
 
 </html>

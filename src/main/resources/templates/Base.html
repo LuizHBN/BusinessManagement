@@ -147,7 +147,7 @@
 </head>
 
 <nav th:fragment = "navbar" class="navbar navbar-expand-lg navbar-light">
-    <img class ="logo-img"src="https://t.ctcdn.com.br/P7-_JvQTS4U7-if6zHyXjyMiNQ8=/400x400/smart/i606944.png"
+    <img class ="logo-img"src="https://static.vecteezy.com/ti/vetor-gratis/p1/11167368-modelo-de-design-de-logotipo-de-manutencao-de-edificio-engrenagem-com-arranha-ceu-e-verifique-o-design-de-ilustracao-do-logotipo-do-icone-vetor.jpg"
       alt="" style="margin-right: 20px;">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
       aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -195,4 +195,114 @@
     </div>
   </nav>
 
-  <script th:fragment = "script" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+  
+  <script th:fragment = "scriptSolicitacao">
+     var contadorDetalhes = 1;
+    var escondido = false;
+
+    if (!escondido) {
+      esconderDetalhes();
+      escondido = true;
+    }
+
+    function esconderDetalhes() {
+      for (var i = contadorDetalhes; i < 8; i++) {
+        var detalhe = document.getElementById("detalhe-" + i);
+        if (detalhe) {
+          detalhe.style.display = 'none';
+        }
+      }
+    }
+
+    function novoDetalhe() {
+      var detalhe = document.getElementById("detalhe-" + contadorDetalhes);
+      detalhe.style.display = 'flex';
+      contadorDetalhes++;
+    }
+
+    function removerDetalhe() {
+      if (contadorDetalhes > 1) {
+        contadorDetalhes--;
+        var detalhe = document.getElementById("detalhe-" + contadorDetalhes);
+        detalhe.style.display = 'none';
+        var inputs = detalhe.querySelectorAll("input");
+        inputs.forEach(function (input) {
+          input.value = "0";
+        });
+        var selects = detalhe.querySelectorAll("select");
+        selects.forEach(function (select) {
+          select.value = "0";
+        })
+      }
+    }
+
+    function formatarValor(input) {
+      var valor = parseFloat(input.value).toFixed(2);
+      if (!isNaN(valor)) {
+        // Formata o número como valor em reais
+        input.value = valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      }
+    }
+
+    function formatarQuantidade(input) {
+      var quantidade = parseFloat(input.value).toFixed(2);
+      input.value = quantidade;
+    }
+
+    function validarFormulario() {
+      for (var i = 0; i < contadorDetalhes; i++) {
+        var detalhe = document.getElementById("detalhe-" + i);
+        var inputs = detalhe.querySelectorAll("input, select");
+
+        for (var j = 0; j < inputs.length; j++) {
+          var input = inputs[i];
+
+          if (input.value.trim() === "") {
+            alert("Por favor, preencha todos os campos");
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+  </script>
+
+  <script th:fragment= "HomeScript"> 
+  document.addEventListener('DOMContentLoaded', function () {
+      function updateTime() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        const timeString = `${hours}:${minutes}:${seconds}`;
+
+        document.getElementById('clock').textContent = timeString;
+      }
+      setInterval(updateTime, 1000);
+      updateTime();
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+            function updateGreeting() {
+                const now = new Date();
+                const hours = now.getHours();
+                let greeting = '';
+
+                if (hours >= 6 && hours < 12) {
+                    greeting = 'Bom dia!';
+                } else if (hours >= 12 && hours < 18) {
+                    greeting = 'Boa tarde!';
+                } else {
+                    greeting = 'Boa noite!';
+                }
+
+                document.getElementById('greeting').textContent = greeting;
+              }
+            setInterval(updateGreeting, 1000);
+
+            updateGreeting();
+        });
+  </script>
+
+<script th:fragment = "scriptBootstrap" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+  

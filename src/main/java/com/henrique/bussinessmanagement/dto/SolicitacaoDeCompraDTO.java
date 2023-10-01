@@ -1,6 +1,6 @@
 package com.henrique.bussinessmanagement.dto;
 
-public class RequisicaoSolicitacaoDeCompra {
+public class SolicitacaoDeCompraDTO {
     private String codigo;
     private String status;
 

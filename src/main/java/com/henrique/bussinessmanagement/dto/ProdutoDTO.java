@@ -6,7 +6,7 @@ import com.henrique.bussinessmanagement.model.enums.Unidades;
 import jakarta.validation.constraints.NotBlank;
 
 
-public class RequisicaoProduto {
+public class ProdutoDTO {
 
 
     private String codigo;

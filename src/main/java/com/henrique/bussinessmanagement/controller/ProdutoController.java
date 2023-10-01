@@ -1,9 +1,8 @@
 package com.henrique.bussinessmanagement.controller;
 
 
-import com.henrique.bussinessmanagement.dto.RequisicaoBusca;
-import com.henrique.bussinessmanagement.dto.RequisicaoProduto;
-import com.henrique.bussinessmanagement.model.DetalheSolicitacaoDeCompra;
+import com.henrique.bussinessmanagement.dto.BuscaDTO;
+import com.henrique.bussinessmanagement.dto.ProdutoDTO;
 import com.henrique.bussinessmanagement.model.Produto;
 import com.henrique.bussinessmanagement.model.enums.TipoProduto;
 import com.henrique.bussinessmanagement.model.enums.Unidades;
@@ -25,7 +24,7 @@ public class    ProdutoController {
     ProdutoRepository produtoRepository;
 
     @GetMapping()
-    public ModelAndView findAllProduto(RequisicaoBusca requisicaoBusca){
+    public ModelAndView findAllProduto(BuscaDTO buscaDTO){
         ModelAndView mv = new ModelAndView();
 
         List<Produto> produtos = produtoRepository.findAll();
@@ -36,8 +35,8 @@ public class    ProdutoController {
     }
 
     @PostMapping("/buscar")
-    public ModelAndView findProduto(RequisicaoBusca requisicaoBusca) {
-        List<Produto> produtos = buscaProduto(requisicaoBusca);
+    public ModelAndView findProduto(BuscaDTO buscaDTO) {
+        List<Produto> produtos = buscaProduto(buscaDTO);
 
         ModelAndView mv = new ModelAndView();
         mv.addObject("produtos", produtos);
@@ -48,16 +47,16 @@ public class    ProdutoController {
 
 
     @GetMapping("/novo")
-    public ModelAndView formularioNovoProduto(RequisicaoProduto requisicaoProduto){
+    public ModelAndView formularioNovoProduto(ProdutoDTO produtoDTO){
         return setProdutoForm();
     }
     @PostMapping("/novo/criar")
-    public ModelAndView cadastraNovoProduto(@Valid @ModelAttribute("requisicaoProduto") RequisicaoProduto requisicaoProduto, BindingResult result) {
+    public ModelAndView cadastraNovoProduto(@Valid @ModelAttribute("requisicaoProduto") ProdutoDTO produtoDTO, BindingResult result) {
         if (result.hasErrors()) {
             return setProdutoForm();
         }
         
-        Produto produto = requisicaoProduto.toProduto();
+        Produto produto = produtoDTO.toProduto();
         Produto salvo = produtoRepository.save(produto);
         salvo.setCodigo();
 
@@ -81,14 +80,14 @@ public class    ProdutoController {
         return mv;
     }
 
-    public List<Produto> buscaProduto(RequisicaoBusca requisicaoBusca){
+    public List<Produto> buscaProduto(BuscaDTO buscaDTO){
         List<Produto> produtos;
 
-        if (requisicaoBusca.getAtributo().equalsIgnoreCase("descricao")){
-            produtos= produtoRepository.findByDescricao(requisicaoBusca.getValor());
+        if (buscaDTO.getAtributo().equalsIgnoreCase("descricao")){
+            produtos= produtoRepository.findByDescricao(buscaDTO.getValor());
         }
-        else if(requisicaoBusca.getAtributo().equalsIgnoreCase("codigo")){
-            produtos = produtoRepository.findByCodigo(requisicaoBusca.getValor());
+        else if(buscaDTO.getAtributo().equalsIgnoreCase("codigo")){
+            produtos = produtoRepository.findByCodigo(buscaDTO.getValor());
         }
         else produtos = produtoRepository.findAll();
 

@@ -21,7 +21,7 @@
         </div>
 
         <div class="search">
-            <form class="form-inline" th:object="${requisicaoBusca}" action="/centro_de_custo/buscar" method="POST">
+            <form class="form-inline" th:object="${buscaDTO}" action="/centro_de_custo/buscar" method="POST">
                 <div class="form-group">
                     <label for="valor">Pesquise na lista de Centros de custo:</label>
                     <div class="input-group">
@@ -57,14 +57,8 @@
             </tbody>
         </table>
     </div>
-
-
-
-
-
-
     </div>
-    <script th:replace="~{base ::script}"></script>
+    <script th:replace="~{base ::scriptBootstrap}"></script>
 </body>
 
 </html>

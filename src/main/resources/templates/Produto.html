@@ -20,7 +20,7 @@
         </div>
 
         <div class="search">
-            <form class="form-inline" th:object="${requisicaoBusca}" action="/produto/buscar" method="POST">
+            <form class="form-inline" th:object="${buscaDTO}" action="/produto/buscar" method="POST">
                 <div class="form-group">
                     <label for="valor">Pesquise na lista de produtos:</label>
                     <div class="input-group">
@@ -33,7 +33,7 @@
                         <div class="col-md-6">
                             <input th:field="*{valor}" id="valor" name="valor" type="text" class="form-control" placeholder="Insira o valor" aria-label="Username" aria-describedby="basic-addon1">
                         </div>
-                        <div class="col-md-3"> <!-- Adjusted column size to 3 -->
+                        <div class="col-md-3">
                             <button class="btn btn-primary" type="submit">Buscar</button>
                         </div>
                     </div>
@@ -60,7 +60,6 @@
         </table>
     </div>
     </div>
-    
-    <script th:replace="~{base ::script}"></script>
+    <script th:replace="~{base :: scriptBootstrap}"></script>
 </body>
 </html>

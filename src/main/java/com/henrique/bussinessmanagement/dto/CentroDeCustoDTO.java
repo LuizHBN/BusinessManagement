@@ -1,10 +1,9 @@
 package com.henrique.bussinessmanagement.dto;
 
 import com.henrique.bussinessmanagement.model.CentroDeCusto;
-import com.henrique.bussinessmanagement.model.Produto;
 import jakarta.validation.constraints.NotBlank;
 
-public class RequisicaoCentroDeCusto {
+public class CentroDeCustoDTO {
     private String codigo;
     @NotBlank(message = "O centro de custo deve possuir uma descrição!")
     private String descricao;

@@ -1,7 +1,7 @@
 package com.henrique.bussinessmanagement.controller;
 
-import com.henrique.bussinessmanagement.dto.RequisicaoBusca;
-import com.henrique.bussinessmanagement.dto.RequisicaoCentroDeCusto;
+import com.henrique.bussinessmanagement.dto.BuscaDTO;
+import com.henrique.bussinessmanagement.dto.CentroDeCustoDTO;
 import com.henrique.bussinessmanagement.model.CentroDeCusto;
 import com.henrique.bussinessmanagement.repository.CentroDeCustoRepository;
 import jakarta.validation.Valid;
@@ -25,7 +25,7 @@ public class CentroDeCustoController {
     CentroDeCustoRepository centroDeCustoRepository;
 
     @GetMapping()
-    public ModelAndView findAllCentroDeCusto(RequisicaoBusca requisicaoBusca){
+    public ModelAndView findAllCentroDeCusto(BuscaDTO buscaDTO){
         ModelAndView mv = new ModelAndView();
 
         List<CentroDeCusto> centrosDeCusto = centroDeCustoRepository.findAll();
@@ -36,8 +36,8 @@ public class CentroDeCustoController {
     }
 
     @PostMapping("/buscar")
-    public ModelAndView findCentroDeCusto(RequisicaoBusca requisicaoBusca) {
-        List<CentroDeCusto> centroDeCustos = buscaCentro(requisicaoBusca);
+    public ModelAndView findCentroDeCusto(BuscaDTO buscaDTO) {
+        List<CentroDeCusto> centroDeCustos = buscaCentro(buscaDTO);
 
         ModelAndView mv = new ModelAndView();
         mv.addObject("centrosDeCusto", centroDeCustos);
@@ -46,14 +46,14 @@ public class CentroDeCustoController {
         return mv;
     }
 
-    public List<CentroDeCusto> buscaCentro(RequisicaoBusca requisicaoBusca){
+    public List<CentroDeCusto> buscaCentro(BuscaDTO buscaDTO){
         List<CentroDeCusto> centros;
 
-        if (requisicaoBusca.getAtributo().equalsIgnoreCase("descricao")){
-            centros= centroDeCustoRepository.findByDescricao(requisicaoBusca.getValor());
+        if (buscaDTO.getAtributo().equalsIgnoreCase("descricao")){
+            centros= centroDeCustoRepository.findByDescricao(buscaDTO.getValor());
         }
-        else if(requisicaoBusca.getAtributo().equalsIgnoreCase("codigo")){
-            centros = centroDeCustoRepository.findByCodigo(requisicaoBusca.getValor());
+        else if(buscaDTO.getAtributo().equalsIgnoreCase("codigo")){
+            centros = centroDeCustoRepository.findByCodigo(buscaDTO.getValor());
         }
         else centros = centroDeCustoRepository.findAll();
 
@@ -61,21 +61,21 @@ public class CentroDeCustoController {
     }
 
     @GetMapping("/novo")
-    public ModelAndView formularioNovoCentroDeCusto(RequisicaoCentroDeCusto requisicaoCentroDeCusto){
+    public ModelAndView formularioNovoCentroDeCusto(CentroDeCustoDTO centroDeCustoDTO){
         ModelAndView mv = new ModelAndView();
         mv.setViewName("FormCentroDeCusto");
         return mv;
     }
 
     @PostMapping("/novo/criar")
-    public ModelAndView cadastraNovoCentroDeCusto(@Valid @ModelAttribute("requisicaoCentroDeCusto") RequisicaoCentroDeCusto requisicaoCentroDeCusto, BindingResult result, RedirectAttributes redirectAttributes) {
+    public ModelAndView cadastraNovoCentroDeCusto(@Valid @ModelAttribute("requisicaoCentroDeCusto") CentroDeCustoDTO centroDeCustoDTO, BindingResult result, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             ModelAndView mv = new ModelAndView();
             mv.setViewName("FormCentroDeCusto");
             return mv;
         }
 
-        CentroDeCusto centroDeCusto = requisicaoCentroDeCusto.toCentroDeCusto();
+        CentroDeCusto centroDeCusto = centroDeCustoDTO.toCentroDeCusto();
         CentroDeCusto salvo = centroDeCustoRepository.save(centroDeCusto);
         salvo.setCodigo();
 

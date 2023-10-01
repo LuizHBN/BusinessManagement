@@ -25,6 +25,8 @@ public class DetalheSolicitacaoDeCompra {
     @Column(nullable = false)
     private BigDecimal valor;
 
+    private BigDecimal valorTotal;
+
     public void LinkToNewSolicitacao(SolicitacaoDeCompra solicitacaoDeCompra){
 
         this.setSolicitacaoDeCompra(solicitacaoDeCompra);
@@ -93,5 +95,13 @@ public class DetalheSolicitacaoDeCompra {
 
     public void setValor(BigDecimal valor) {
         this.valor = valor;
+    }
+
+    public BigDecimal getValorTotal() {
+        return valorTotal;
+    }
+
+    public void setValorTotal() {
+        this.valorTotal = this.valor.multiply(this.quantidade) ;
     }
 }

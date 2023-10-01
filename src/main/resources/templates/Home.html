@@ -4,69 +4,33 @@
 <head>
   <title>Home</title>
   <th:block th:replace="~{base ::head}">
-      <th:block th:attr="th:replace=${title}"></th:block>
+    <th:block th:attr="th:replace=${title}"></th:block>
   </th:block>
 </head>
 
 <body>
-  
+
   <div class="background-image"></div>
-  <div th:replace = "~{base :: navbar}"></div>
+  <div th:replace="~{base :: navbar}"></div>
   <div class="content">
     <div class="welcome">
-      <h1>Bussiness Management</h1>
+      <h1>Business Management</h1>
       <h5>Bem vindo!</h5>
     </div>
 
     <div class="card-time">
-    <div class="time">
-      <div class="time-container" id="clock">
-        Carregando horário...
+      <div class="time">
+        <div class="time-container" id="clock">
+          Carregando horário...
+        </div>
+        <h1 id="greeting" class="greeting"></h1>
       </div>
-      <h1 id="greeting" class="greeting"></h1>
     </div>
   </div>
-  </div>
-  
 
-   <script th:replace="~{base ::script}"></script>
-  
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      function updateTime() {
-        const now = new Date();
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const seconds = String(now.getSeconds()).padStart(2, '0');
-        const timeString = `${hours}:${minutes}:${seconds}`;
 
-        document.getElementById('clock').textContent = timeString;
-      }
-      setInterval(updateTime, 1000);
-      updateTime();
-    });
-
-    document.addEventListener('DOMContentLoaded', function () {
-            function updateGreeting() {
-                const now = new Date();
-                const hours = now.getHours();
-                let greeting = '';
-
-                if (hours >= 0 && hours < 12) {
-                    greeting = 'Bom dia!';
-                } else if (hours >= 12 && hours < 18) {
-                    greeting = 'Boa tarde!';
-                } else {
-                    greeting = 'Boa noite!';
-                }
-
-                document.getElementById('greeting').textContent = greeting;
-              }
-            setInterval(updateGreeting, 1000);
-
-            updateGreeting();
-        });
-  </script>
+  <script th:replace="~{base ::scriptBootstrap}"></script>
+  <script th:replace="~{base ::HomeScript}"></script>
 </body>
 
 </html>

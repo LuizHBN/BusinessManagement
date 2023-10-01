@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
-public class RequisicaoDetalheSolicitacaoDeCompra {
+public class DetalheSolicitacaoDeCompraDTO {
     @NotNull(message = "Selecione um produto")
     private Integer idProduto;
     @NotNull(message = "Selecione um centro de custo")

@@ -25,7 +25,7 @@
     </div>
 
 
-    <form th:object="${requisicaoProduto}" action="/produto/novo/criar" method="POST">
+    <form th:object="${produtoDTO}" action="/produto/novo/criar" method="POST">
       <div class="mb-3">
         <label for="descricao" class="form-label">Descrição do produto:</label>
         <input th:field="*{descricao}" th:errorclass="is-invalid" name="descricao" class="form-control"
